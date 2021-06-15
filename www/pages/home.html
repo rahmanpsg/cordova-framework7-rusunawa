@@ -1,0 +1,570 @@
+<template>
+    <div class="page">
+        <div class="navbar">
+            <div class="navbar-bg"></div>
+            <div class="navbar-inner">
+                <div class="navbar-inner sliding">
+                    <div class="subnavbar">
+                        <div class="subnavbar-inner">
+                            <div class="title">Rusunawa UM-Pare</div>
+                        </div>
+                        <div class="right">
+                            <a class="link popover-open" href="#" data-popover=".popover-links">
+                                <i class="f7-icons">ellipsis_vertical</i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="toolbar tabbar tabbar-labels toolbar-bottom">
+            <div class="toolbar-inner">
+                <a href="#view-home" class="tab-link tab-link-active">
+                    <i class="icon f7-icons">house_fill</i>
+                    <span class="tabbar-label">Home</span>
+                </a>
+                <a href="#view-kamar" class="tab-link">
+                    <i class="icon f7-icons">building_2_fill</i>
+                    <span class="tabbar-label">Kamar</span>
+                </a>
+                <a href="#view-pesanan" class="tab-link">
+                    <i class="icon f7-icons">bell_fill
+                        {{#if totalPesanan}}<span class="badge color-deeporange">{{totalPesanan}}</span>{{/if}}
+                    </i>
+                    <span class="tabbar-label">Pesanan</span>
+                </a>
+            </div>
+        </div>
+        <div class="tabs-swipeable-wrap">
+            <div class="tabs">
+                <div id="view-home" class="page-content tab tab-active">
+                    <div class="block">
+                        <div class="card">
+                            <div class="card-header"><b>Informasi</b></div>
+                            <div class="card-content card-content-padding text-align-center">
+                                <!-- <img src="./assets/background.jpeg" width="130" class="lazy lazy-fade-in"> -->
+                                <div class="swiper-container swiper-init" data-slides-per-view="auto"
+                                    data-centered-slides="true" data-pagination='{"el": ".swiper-pagination"}'>
+                                    <div class="swiper-wrapper">
+                                        <div class="swiper-slide"><img src="./assets/rusunawa.jpeg" height="200px">
+                                        </div>
+                                        <div class="swiper-slide"><img src="./assets/rusunawa2.jpeg" height="200px">
+                                        </div>
+                                        <div class="swiper-slide"><img src="./assets/rusunawa3.jpeg" height="200px">
+                                        </div>
+                                    </div>
+                                    <div class="swiper-pagination"></div>
+                                </div>
+                                <p>Selamat Datang di Aplikasi Rusunawa Mahasiswa
+                                    Universitas Muhammadiyah Parepare</p>
+                                <i>Alamat: Lapadde, Kec. Ujung, Kota Pare-Pare, Sulawesi Selatan 91112, Indonesia</i>
+                                <p>
+                                    <a class="external button display-flex text-color-green"
+                                        href=" https://api.whatsapp.com/send?phone=628114220910"> <img
+                                            src="./assets/whatsapp.svg" width="30px">
+                                        &nbsp; Contact
+                                        Person
+                                    </a>
+                                </p>
+                                <!-- <i>+62 811-4220-910</i> -->
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header"><b>Visi dan Misi</b></div>
+                            <div class="card-content card-content-padding">
+                                <p><b>Visi</b></p>
+                                Terjuwudnya UMPAR yang Islami dan Unggul dalam Ipteks
+                                <p><b>Misi</b></p>
+                                <ol>
+                                    <li>Menyelenggarakan pengembangan pusat dan penerapan da’wah Islamiah amar ma’ruf
+                                        nahi munkar kepada stakeholder internal dan eksternal</li>
+                                    <li>Mengembangkan Ipteks terpadu yang unggul dengan nilai diniah, ilmiah dan
+                                        berwawasan lingkungan.</li>
+                                    <li>Mengembangkan iklim pembelajaran yang kondusif dalam menghasilkan lulusan
+                                        yang berstandar Internasional, bernilai Budaya Bangsa dan Relegius.</li>
+                                    <li>Mengembangkan sistem pendidikan berbasis information and communications
+                                        technology untuk menghasilkan lulusan dengan kompetensi keahlian dan
+                                        kewirausahaan yang terintegrasi dengan dunia kerja.</li>
+                                    <li>Menyelenggarakan penelitian dan pengabdian kepada masyarakat yang
+                                        unggul dan dapat meningkatkan nilai kesejahteraan manusia.</li>
+                                    <li>Menerapkan manajemen akademik, sumberdaya dan mutu yang berbasis
+                                        perencanaan dan teknologi informasi.</li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="view-kamar" class="page-content tab">
+                    <div class="block">
+                        <div class="card">
+                            <div class="card-header"><b>Jumlah Kamar Rusunawa</b></div>
+                            <div class="card-content card-content-padding text-align-center">
+                                <div class="list">
+                                    <ul>
+                                        <li>
+                                            <div class="item-content">
+                                                <div class="item-media"><img src="./assets/woman.png" height="35px">
+                                                </div>
+                                                <div class="item-inner">
+                                                    <div class="item-title">Rusunawa Putri</div>
+                                                    <div class="item-after"> <span
+                                                            class="badge color-orange">{{totalKamarPutri}}
+                                                            Kamar</span></div>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="item-content">
+                                                <div class="item-media"><img src="./assets/man.png" height="35px"></div>
+                                                <div class="item-inner">
+                                                    <div class="item-title">Rusunawa Putra</div>
+                                                    <div class="item-after"> <span
+                                                            class="badge color-deeporange">{{totalKamarPutra}}
+                                                            Kamar</span></div>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-header"><b>Fasilitas Kamar Rusunawa</b></div>
+                            <div class="card-content card-content-padding">
+                                <div class="list accordion-list">
+                                    <ul>
+                                        <li class="accordion-item accordion-item-opened">
+                                            <a href="#" class="item-content item-link">
+                                                <div class="item-inner">
+                                                    <div class="item-title">
+                                                        <div class="chip color-teal">
+                                                            <div class="chip-label">Kamar A</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                            <div class="accordion-item-content">
+                                                <div class="block">
+                                                    <div class="list">
+                                                        <ul>
+                                                            {{#each kamarA}}
+                                                            <li>
+                                                                <div class="item-content">
+                                                                    <div class="item-media">
+                                                                        <img data-src="{{icon}}" class="lazy"
+                                                                            width="25px">
+                                                                    </div>
+                                                                    <div class="item-inner">
+                                                                        <div class="item-title">{{nama}}</div>
+                                                                        <div class="item-after"> <span
+                                                                                class="badge color-orange">{{jumlah}}</span>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </li>
+                                                            {{/each}}
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <li class="accordion-item">
+                                            <a href="#" class="item-content item-link">
+                                                <div class="item-inner">
+                                                    <div class="item-title">
+                                                        <div class="chip color-lime">
+                                                            <div class="chip-label">Kamar B</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                            <div class="accordion-item-content">
+                                                <div class="block">
+                                                    <div class="list">
+                                                        <ul>
+                                                            {{#each kamarB}}
+                                                            <li>
+                                                                <div class="item-content">
+                                                                    <div class="item-media">
+                                                                        <img data-src="{{icon}}" class="lazy"
+                                                                            width="25px">
+                                                                    </div>
+                                                                    <div class="item-inner">
+                                                                        <div class="item-title">{{nama}}</div>
+                                                                        <div class="item-after"> <span
+                                                                                class="badge color-deeporange">{{jumlah}}</span>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </li>
+                                                            {{/each}}
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="block">
+                            <div class="row">
+                                <b style="font-size: 18px;">Sewa Kamar</b>
+                                <a href="/kamar/" class="color-blue display-flex justify-content-center">Lihat
+                                    Daftar Kamar &nbsp;<i class="icon f7-icons"
+                                        style="font-size: 18px;">arrow_right</i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="view-pesanan" class="page-content tab ptr-content">
+                    <div class="ptr-preloader">
+                        <div class="preloader"></div>
+                        <div class="ptr-arrow"></div>
+                    </div>
+                    <div class="block">
+                        <div class="card">
+                            <div class="card-header"><b>Pembayaran</b></div>
+                            <div class="card-content card-content-padding">
+                                <div class="list no-hairlines-between inset">
+                                    <ul>
+                                        {{#each dataPesanan}}
+                                        <li class="swipeout" data-id="{{id}}" @touchmove="stopPropagation"
+                                            @click="swipeOpen">
+                                            <div class="swipeout-content item-content item-link">
+                                                <div class="item-media">
+                                                    {{iconHelper status}}
+                                                </div>
+                                                <div class="item-inner">
+                                                    <div class="item-title">
+                                                        <div class="item-header">
+                                                            {{waktuFormatter ditambahkan_pada}}
+                                                        </div>
+                                                        <div class="item-footer">
+                                                            {{status}}
+                                                        </div>
+                                                    </div>
+                                                    <div class="item-after"> <span class="badge color-deeporange">
+                                                            {{total_bayar.replaceAll(',','.')}}
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="swipeout-actions-right">
+                                                {{#js_if "this.status == 'Belum diupload'"}}
+                                                <a href="#" class="color-blue link" @click="aksiUpload">
+                                                    <i class="icon f7-icons">cloud_upload_fill</i>&nbsp;
+                                                    Upload</a>
+                                                {{/js_if}}
+                                                <a href="/pembayaran/{{id}}/" class="color-teal link"><i
+                                                        class="icon f7-icons">eye_fill</i>&nbsp;
+                                                    Detail</a>
+                                            </div>
+                                        </li>
+                                        {{else}}
+                                        <li>
+                                            <div class="item-content">
+                                                <div class="item-media">
+                                                    <i class="f7-icons text-color-deeporange"
+                                                        style="font-size:40px">exclamationmark_shield_fill</i>
+                                                </div>
+                                                <div class="item-inner">
+                                                    <div class="item-text">Anda belum memiliki data pembayaran</div>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        {{/each}}
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header"><b>Histori</b></div>
+                            <div class="card-content card-content-padding">
+                                <div class="list no-hairlines-between accordion-list">
+                                    <ul>
+                                        {{#each dataHistori}}
+                                        <li class="accordion-item">
+                                            <a href="" class="item-link item-content">
+                                                <div class="item-inner">
+                                                    <div class="item-title">
+                                                        <div class="item-header">
+                                                            {{waktuFormatter ditambahkan_pada}}
+                                                        </div>
+                                                        <div class="item-footer">
+                                                            {{status}}
+                                                        </div>
+                                                    </div>
+                                                    <div class="item-after">
+                                                        <span class="badge color-deeporange">
+                                                            {{total_bayar.replaceAll(',','.')}}
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                            <div class="accordion-item-content">
+                                                <div class="block">
+                                                    <div class="list no-hairlines">
+                                                        <ul>
+                                                            {{listHistoriHelper this}}
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        {{else}}
+                                        <li>
+                                            <div class="item-content">
+                                                <div class="item-media">
+                                                    <i class="f7-icons text-color-deeporange"
+                                                        style="font-size:40px">exclamationmark_shield_fill</i>
+                                                </div>
+                                                <div class="item-inner">
+                                                    <div class="item-text">Anda belum memiliki histori pembayaran</div>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        {{/each}}
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="popover popover-links">
+            <div class="popover-inner">
+                <div class="list">
+                    <ul>
+                        <li><a class="list-button item-link popover-close" @click="logout">Logout</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+
+<script>
+    // script must return component object
+    return {
+        data: function () {
+            return {
+                kamarA: [{
+                    icon: './assets/springbed.png',
+                    nama: 'Springbed',
+                    jumlah: 3
+                }, {
+                    icon: './assets/meja.png',
+                    nama: 'Meja',
+                    jumlah: 1
+                }, {
+                    icon: './assets/kursi.png',
+                    nama: 'Kursi',
+                    jumlah: 1
+                }, {
+                    icon: './assets/kipas.png',
+                    nama: 'Kipas Angin',
+                    jumlah: 1
+                }, {
+                    icon: './assets/lemari.png',
+                    nama: 'Lemari',
+                    jumlah: 3
+                }],
+                kamarB: [{
+                    icon: './assets/ranjang.png',
+                    nama: 'Ranjang Susun',
+                    jumlah: 1
+                }, {
+                    icon: './assets/lemari.png',
+                    nama: 'Lemari',
+                    jumlah: 1
+                }]
+            }
+        },
+        on: {
+            pageInit: function () {
+                this.loadDataKamar()
+                this.loadDataPesanan()
+                this.loadDataHistori()
+
+                app.statusbar.overlaysWebView(true)
+
+                this.actionUpload = app.actions.create({
+                    buttons: [{
+                            text: 'Silahkan upload bukti pembayaran',
+                            label: true
+                        },
+                        {
+                            text: 'Buka Kamera',
+                            icon: '<i class="icon f7-icons color-primary">camera</i>',
+                            onClick: () => {
+                                this.openCamera()
+                            }
+                        },
+                        {
+                            text: 'Buka Galeri',
+                            icon: '<i class="icon f7-icons color-primary">photo_on_rectangle</i>',
+                            onClick: () => {
+                                this.openGaleri()
+                            }
+                        },
+                        {
+                            text: 'Batal',
+                            color: 'red'
+                        },
+                    ]
+                })
+
+                $$('#view-pesanan').on('ptr:refresh', () => {
+                    this.loadDataHistori()
+                    this.loadDataPesanan()
+                })
+
+                app.on('loadDataPesanan', this.loadDataPesanan)
+                app.on('loadDataHistori', this.loadDataHistori)
+            },
+            pageRemove: function () {
+                app.off('loadDataPesanan', this.loadDataPesanan)
+                app.off('loadDataHistori', this.loadDataHistori)
+            }
+        },
+        methods: {
+            loadDataKamar: function () {
+                app.progressbar.show('white')
+                app.request.promise.json(`${URL}totalKamar`).then(res => {
+                    app.progressbar.hide()
+                    this.$setState(res.data)
+                })
+            },
+            loadDataPesanan: function () {
+                app.progressbar.show('white')
+                app.request.promise.get(`${URL}pesanan`, {
+                    nim
+                }, 'json').then(res => {
+                    app.progressbar.hide()
+
+                    const totalPesanan = res.data.filter(v => {
+                        return v.status == 'Belum diupload'
+                    }).length
+
+                    this.$setState({
+                        dataPesanan: res.data,
+                        totalPesanan
+                    }).then(() => app.ptr.done())
+                })
+            },
+            loadDataHistori: function () {
+                app.progressbar.show('white')
+                app.request.promise.get(`${URL}histori`, {
+                    nim
+                }, 'json').then(res => {
+                    app.progressbar.hide()
+
+                    this.$setState({
+                        dataHistori: res.data
+                    })
+                })
+            },
+            stopPropagation: function () {
+                event.stopPropagation()
+            },
+            swipeOpen: function () {
+                app.swipeout.open($$(event.target).parents('li'));
+            },
+            aksiUpload: function () {
+                this.actionUpload.open()
+            },
+            openCamera: function (selection) {
+                const options = {
+                    quality: 50,
+                    destinationType: Camera.DestinationType.DATA_URL, //Base64 return
+                    sourceType: Camera.PictureSourceType.CAMERA,
+                    encodingType: Camera.EncodingType.JPEG,
+                    mediaType: Camera.MediaType.PICTURE,
+                    allowEdit: false,
+                    correctOrientation: true, //Corrects Android orientation quirks
+                    targetHeight: 800,
+                    targetWidth: 800
+                }
+
+                navigator.camera.getPicture((imageUri) => {
+                    this.uploadData(imageUri)
+
+                }, (error) => {
+                    console.debug("Unable to obtain picture: " + error, "app");
+
+                }, options);
+            },
+            openGaleri: function () {
+                window.imagePicker.getPictures(
+                    (results) => {
+                        if (results.length != 0) {
+                            this.uploadData(results[0])
+                        }
+                    },
+                    (error) => {
+                        console.log('Error: ' + error);
+                    }, {
+                        maximumImagesCount: 1,
+                        height: 800,
+                        width: 800,
+                        quality: 50,
+                        outputType: 1 //Base64 return
+                    }
+                );
+            },
+            uploadData: function (file) {
+                const self = this
+                const target = $$(app.swipeout.el)
+                const id = target.data('id')
+
+                app.dialog.confirm('File akan diupload?', 'Informasi', () => {
+                    app.dialog.progress('Mengupload file...');
+                    app.request.promise.post(`${URL}buktiPembayaran`, {
+                        id,
+                        file
+                    }, 'json').then(res => {
+                        app.dialog.close();
+
+                        app.toast.create({
+                            icon: res.data.error ?
+                                '<i class="icon f7-icons">exclamationmark_circle_fill</i>' :
+                                '<i class="icon f7-icons">checkmark_alt_circle_fill</i>',
+                            text: res.data.message,
+                            position: 'center',
+                            destroyOnClose: true,
+                            closeTimeout: 3000,
+                        }).open()
+
+                        if (!res.data.error) {
+                            app.swipeout.close(app.swipeout.el, () => {
+                                self.loadDataPesanan()
+                                self.loadDataHistori()
+                            })
+                        }
+                    }).catch(err => {
+                        app.dialog.close();
+                        console.log(err);
+                        app.dialog.alert('Tidak dapat terhubung ke server', 'Gagal');
+                    })
+                })
+            },
+            logout: function () {
+                // FirebasePlugin.unregister();
+                localStorage.clear()
+                ls.open()
+                app.statusbar.overlaysWebView(false)
+                app.statusbar.setBackgroundColor('#fff')
+            }
+        }
+    }
+</script>

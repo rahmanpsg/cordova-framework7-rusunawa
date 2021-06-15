@@ -1,0 +1,326 @@
+<template>
+    <div class="page">
+        <div class="navbar">
+            <div class="navbar-bg"></div>
+            <div class="navbar-inner">
+                <div class="left"><a class="back"><i class="icon f7-icons">chevron_left</i> Kembali</a></div>
+                <div class="title">Daftar Kamar {{kategori}}</div>
+                <div class="subnavbar">
+                    <div class="subnavbar-inner">
+                        <div class="segmented segmented-raised">
+                            <a class="button tab-link tab-link-active" href="#lantai1">Lantai 1</a>
+                            <a class="button tab-link" href="#lantai2">Lantai 2</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="page-content hide-navbar-on-scroll">
+            <div class="block-title">Silahkan pilih kamar yang ingin anda sewa</div>
+            <div class="block">
+                <div class="chip color-blue">
+                    <div class="chip-label">Kosong</div>
+                </div>
+                <div class="chip color-green">
+                    <div class="chip-label">Terisi</div>
+                </div>
+                <div class="chip color-red">
+                    <div class="chip-label">Penuh</div>
+                </div>
+                <br>
+                <div class="chip chip-outline color-teal">
+                    <div class="chip-label">Tipe A</div>
+                </div>
+                <div class="chip chip-outline color-lime">
+                    <div class="chip-label">Tipe B</div>
+                </div>
+            </div>
+            <div class="tabs">
+                <div class="tab tab-active" id="lantai1">
+                    <div class="card">
+                        <div class="card-content display-flex justify-content-center">
+                            <canvas id="canvas" width="auto" height="812px"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab" id="lantai2">
+                    <div class="card">
+                        <div class="card-content display-flex justify-content-center">
+                            <canvas id="canvas2" width="auto" height="812px"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Swipe to step sheet -->
+        <div class="sheet-modal sheet-order" style="height:auto; --f7-sheet-bg-color: #fff;">
+            <div class="sheet-modal-inner">
+                <div class="sheet-modal-swipe-step">
+                    <div class="block-title block-title-medium margin-top">Detail Kamar:</div>
+                    <div class="list no-hairlines">
+                        <ul>
+                            {{#each detailKamar}}
+                            <li class="item-content">
+                                <div class="item-inner">
+                                    <div class="item-title">{{@key}}</div>
+                                    <div class="item-after text-color-black"><b>{{this}}</b>&nbsp;
+                                    </div>
+                                </div>
+                            </li>
+                            {{/each}}
+                        </ul>
+                    </div>
+                    <div class="padding-horizontal padding-bottom">
+                        {{#js_if "this.status !== 'Penuh'"}}
+                        <a class="button button-fill button-round button-raised color-blue"
+                            @click="lanjutMendaftar">Lanjutkan
+                            Mendaftar</a>
+                        {{else}}
+                        <a class="button button-fill button-round button-raised color-gray">Lanjutkan
+                            Mendaftar</a>
+                        {{/js_if}}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</template>
+<style>
+    .tab-link-active {
+        background: rgb(52, 235, 235);
+    }
+</style>
+<script>
+    // script must return component object
+    return {
+        data: function () {
+            return {
+                newLoad: true,
+                kategori: ucfirst(kategori)
+            }
+        },
+        on: {
+            pageBeforeIn: function () {
+                if (this.newLoad)
+                    app.preloader.show()
+            },
+            pageAfterIn: function () {
+                if (this.newLoad) {
+                    this.loadObjects()
+                    app.preloader.hide()
+                }
+
+                this.$setState({
+                    newLoad: false
+                })
+            },
+            pageBeforeRemove: function () {
+                app.statusbar.overlaysWebView(true)
+            },
+            pageInit: function () {
+                let self = this;
+                app.statusbar.overlaysWebView(false)
+                app.statusbar.setBackgroundColor('#0c01ba')
+                this.$setState(this.$route.params)
+
+                this.grid = 20
+                this.backgroundColor = '#edebeb'
+                this.lineStroke = '#ebebeb'
+                this.kamarKosong = '#2196f3';
+                this.kamarTerisi = '#4cd964';
+                this.kamarPenuh = '#ff3b30';
+                this.kamarTipeA = '#009688'
+                this.kamarTipeB = '#cddc39'
+                this.kamarSelected = '#000'
+                this.kamarShadow = 'rgba(0, 0, 0, 0.4) 3px 3px 7px'
+
+                // Create swipe-to-step Sheet
+                app.sheet.create({
+                    el: '.sheet-order',
+                    swipeToClose: true,
+                    swipeToStep: true,
+                    backdrop: true,
+                    on: {
+                        close: () => {
+                            this.lantai1.discardActiveObject()
+                            this.lantai2.discardActiveObject()
+                        }
+                    }
+                });
+            }
+        },
+        methods: {
+            initCanvas: function (canvas) {
+                const self = this;
+
+                canvas.backgroundColor = this.backgroundColor
+
+                canvas.observe('object:selected', this.klikKamar)
+            },
+            klikKamar: function (e) {
+                const {
+                    id,
+                    number,
+                    jumlah,
+                    total,
+                    status,
+                    tipe
+                } = e.target;
+
+                const detailKamar = {
+                    Nomor: number,
+                    Tipe: tipe,
+                    Keterangan: status ? status : 'Kosong'
+                }
+
+                if (jumlah > 0 && jumlah < total) {
+                    detailKamar['Keterangan'] += ` ${jumlah} orang`
+                    detailKamar[
+                            `<i class="icon f7-icons color-blue" style="font-size:24px;">info_circle</i> Informasi`
+                        ] =
+                        `Kamar masih bisa diisi ${total - jumlah} orang`
+                }
+
+                this.$setState({
+                    detailKamar,
+                    status,
+                    id
+                })
+
+                app.sheet.open('.sheet-order');
+
+            },
+            tambahKamar: function (canvas, id, status, jumlah, total, nomor, tipe, left, top, width, height, angle =
+                0) {
+                const o = new fabric.Rect({
+                    width: width,
+                    height: height,
+                    // fill: (!reserved ? this.tableFill : this.tableFillReserv),
+                    fill: (status == 'Terisi' ? this.kamarTerisi : status == 'Penuh' ? this.kamarPenuh :
+                        this.kamarKosong),
+                    stroke: (tipe == 'A' ? this.kamarTipeA : this.kamarTipeB),
+                    strokeWidth: 4,
+                    shadow: this.kamarShadow,
+                    originX: 'center',
+                    originY: 'center',
+                    centeredRotation: true,
+                    snapAngle: 45,
+                    selectable: false
+                })
+
+                o.set('angle', angle);
+
+                const t = new fabric.IText(nomor.toString(), {
+                    fontFamily: 'Calibri',
+                    fontSize: 14,
+                    fill: '#fff',
+                    textAlign: 'center',
+                    originX: 'center',
+                    originY: 'center'
+                })
+                const g = new fabric.Group([o, t], {
+                    left: left,
+                    top: top,
+                    centeredRotation: true,
+                    snapAngle: 45,
+                    selectable: true,
+                    type: 'table',
+                    id: id,
+                    number: nomor,
+                    tipe,
+                    jumlah,
+                    total,
+                    status,
+                    hasControls: false,
+                    lockMovementX: true,
+                    lockMovementY: true,
+                    borderColor: this.kamarSelected,
+                    borderScaleFactor: 2.5
+                })
+
+                canvas.add(g)
+                return g
+            },
+            sendLinesToBack: function (canvas) {
+                canvas.getObjects().map(o => {
+                    if (o.type === 'line') {
+                        canvas.sendToBack(o)
+                    }
+                })
+            },
+            loadObjects: function () {
+                this.lantai1 = new fabric.Canvas('canvas')
+                this.lantai2 = new fabric.Canvas('canvas2')
+
+                this.initCanvas(this.lantai1)
+                this.initCanvas(this.lantai2)
+
+                app.request.promise.get(`${URL}loadKamar`, {
+                    kategori
+                }, 'json').then(res => {
+                    const data = res.data;
+
+                    for (let item of data) {
+                        const {
+                            id,
+                            lantai,
+                            nomor,
+                            tipe,
+                            jumlah,
+                            status,
+                            total
+                        } = item;
+
+                        const {
+                            left,
+                            top,
+                            width,
+                            height,
+                            angle
+                        } = JSON.parse(item.attribut);
+
+                        this.tambahKamar(lantai == 1 ? this.lantai1 : this.lantai2, id, status, jumlah,
+                            total,
+                            nomor,
+                            tipe,
+                            left,
+                            top,
+                            width,
+                            height,
+                            angle)
+                    }
+
+                    this.lantai1.selection = false
+                    this.lantai1.hoverCursor = 'move'
+                    this.lantai2.selection = false
+                    this.lantai2.hoverCursor = 'move'
+                    // canvas.discardActiveObject()
+                })
+            },
+            lanjutMendaftar: function () {
+                const {
+                    Nomor,
+                    Tipe,
+                    Keterangan
+                } = this.detailKamar
+
+                const url = app.views.home.router.generateUrl({
+                    name: 'mendaftar',
+                    params: {
+                        id_kamar: this.id
+                    },
+                    query: {
+                        Nomor,
+                        Tipe,
+                        Keterangan
+                    }
+                })
+
+                app.sheet.close('.sheet-order');
+                app.views.home.router.navigate(url)
+            }
+        }
+    }
+</script>

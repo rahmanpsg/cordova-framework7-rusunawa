@@ -1,0 +1,331 @@
+<template>
+    <div class="page">
+        <div class="navbar">
+            <div class="navbar-bg"></div>
+            <div class="navbar-inner">
+                <div class="left"><a class="back"><i class="icon f7-icons">chevron_left</i> Kembali</a></div>
+                <div class="title">Pendaftaran</div>
+            </div>
+        </div>
+        <div class="page-content hide-navbar-on-scroll">
+            <div class="list no-hairlines">
+                <ul>
+                    {{#each detailKamar}}
+                    <li class="item-content">
+                        <div class="item-inner">
+                            <div class="item-title">{{@key}}</div>
+                            <div class="item-after"><b>
+                                    <div class="chip color-orange">
+                                        <div class="chip-label">{{this}}</div>
+                                    </div>
+                                </b>&nbsp;
+                            </div>
+                        </div>
+                    </li>
+                    {{/each}}
+                </ul>
+            </div>
+
+            <div class="block-title">Silahkan lengkapi data yang dibutuhkan</div>
+            <div class="list accordion-list accordion-opposite">
+                <ul>
+                    <li class="accordion-item accordion-item-opened">
+                        <a class="item-content item-link" href="#">
+                            <div class="item-inner">
+                                <div class="item-title">
+                                    <div class="chip color-blue">
+                                        <div class="chip-label">Step 1</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                        <div class="accordion-item-content">
+                            <div class="block">
+                                <ul>
+                                    <li>
+                                        <a id="selectPembayaran" class="item-link smart-select">
+                                            <select name="cara_pembayaran">
+                                                <option value="Bulanan" selected>Bulanan</option>
+                                                <option value="Tahunan">Tahunan</option>
+                                            </select>
+                                            <div class="item-content">
+                                                <div class="item-inner">
+                                                    <div class="item-title">Cara Pembayaran</div>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </li>
+                                    <li class="item-content">
+                                        <div class="item-inner">
+                                            <div class="item-title">Biaya</div>
+                                            <div class="item-after"><b>
+                                                    <div class="chip color-lime">
+                                                        <div class="chip-label">{{formatRupiahHelper biaya}}</div>
+                                                    </div>
+                                                </b>&nbsp;
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="item-content item-input">
+                                        <div class="item-inner">
+                                            <div class="item-input-wrap">
+                                                <input type="text" placeholder="Pilih Tanggal masuk" readonly="readonly"
+                                                    id="tanggalMasuk" />
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="item-content">
+                                        <div class="item-inner">
+                                            <div class="item-after">
+                                                <a @click="klikNext" class="button button-outline button-round button-raised
+                                                    color-blue">Selanjutnya <i class="icon f7-icons"
+                                                        style="font-size:18px">arrow_down</i></a>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="accordion-item" id="accordionStep2">
+                        <a class="item-content item-link" href="#">
+                            <div class="item-inner">
+                                <div class="item-title">
+                                    <div class="chip color-blue">
+                                        <div class="chip-label">Step 2</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                        <div class="accordion-item-content">
+                            <div class="block">
+                                <div class="list inline-labels no-hairlines-md">
+                                    <form id="formUser">
+                                        <ul>
+                                            <li class="item-content item-input">
+                                                <div class="item-inner">
+                                                    <div class="item-title item-label">No KTP</div>
+                                                    <div class="item-input-wrap">
+                                                        <input type="number" name="ktp" placeholder="Masukkan nomor KTP"
+                                                            required validate>
+                                                        <span class="input-clear-button"></span>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li class="item-content item-input">
+                                                <div class="item-inner">
+                                                    <div class="item-title item-label">Semester</div>
+                                                    <div class="item-input-wrap">
+                                                        <input type="number" name="semester"
+                                                            placeholder="Masukkan semester sekarang" required validate>
+                                                        <span class="input-clear-button"></span>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li class="item-content item-input">
+                                                <div class="item-inner">
+                                                    <div class="item-title item-label">Nama Ayah</div>
+                                                    <div class="item-input-wrap">
+                                                        <input type="text" name="ayah" placeholder="Masukkan nama ayah"
+                                                            required validate>
+                                                        <span class="input-clear-button"></span>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li class="item-content item-input">
+                                                <div class="item-inner">
+                                                    <div class="item-title item-label">Nama Ibu</div>
+                                                    <div class="item-input-wrap">
+                                                        <input type="text" name="ibu" placeholder="Masukkan nama ibu"
+                                                            required validate>
+                                                        <span class="input-clear-button"></span>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li class="item-content item-input">
+                                                <div class="item-inner">
+                                                    <div class="item-title item-label">Pekerjaan Ayah</div>
+                                                    <div class="item-input-wrap">
+                                                        <input type="text" name="pekerjaan_ayah"
+                                                            placeholder="Masukkan pekerjaan ayah" required validate>
+                                                        <span class="input-clear-button"></span>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li class="item-content item-input">
+                                                <div class="item-inner">
+                                                    <div class="item-title item-label">Pekerjaan Ibu</div>
+                                                    <div class="item-input-wrap">
+                                                        <input type="text" name="pekerjaan_ibu"
+                                                            placeholder="Masukkan pekerjaan ibu" required validate>
+                                                        <span class="input-clear-button"></span>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li class="item-content">
+                                                <div class="item-inner">
+                                                    <div class="item-after">
+                                                        <a @click="submitPendaftaran" class="button button-outline button-round button-raised
+                                                                                                color-blue">Kirim
+                                                            <i class="icon f7-icons"
+                                                                style="font-size:18px">arrow_right</i></a>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</template>
+<script>
+    return {
+        data: function () {
+            const detailKamar = this.$route.query;
+            const biaya = detailKamar.Tipe == 'A' ? 400000 : 300000
+            return {
+                ...this.$route.params,
+                detailKamar,
+                biaya
+            };
+        },
+        on: {
+            pageInit: function () {
+                const self = this
+
+                $$('#accordionStep2').on('accordion:beforeopen', () => {
+                    if (!this.tanggalMasuk.getValue()) {
+                        app.toast.create({
+                            icon: '<i class="icon f7-icons">exclamationmark_circle_fill</i>',
+                            text: 'Tanggal masuk belum diisi',
+                            position: 'center',
+                            destroyOnClose: true,
+                            closeTimeout: 3000,
+                        }).open()
+
+                        event.detail.prevent()
+                    }
+                })
+
+                this.selectPembayaran = app.smartSelect.create({
+                    el: '#selectPembayaran',
+                    openIn: 'sheet',
+                    sheetCloseLinkText: 'Tutup',
+                    closeOnSelect: true,
+                    on: {
+                        close: function () {
+                            const biaya = this.getValue() == 'Tahunan' ? self.biaya * 10 : self.biaya
+
+                            self.$setState({
+                                biaya
+                            })
+                        }
+                    }
+                })
+
+                this.tanggalMasuk = app.calendar.create({
+                    inputEl: '#tanggalMasuk',
+                    closeOnSelect: true,
+                });
+
+                this.action = app.actions.create({
+                    buttons: [{
+                            text: 'Pendaftaran akan dikirim?',
+                            label: true
+                        },
+                        {
+                            text: 'Kirim',
+                            icon: '<i class="icon f7-icons text-color-blue">checkmark_alt</i>',
+                            onClick: () => {
+                                this.sendData()
+                            }
+                        },
+                        {
+                            text: 'Batal',
+                            icon: '<i class="icon f7-icons text-color-red">xmark</i>'
+                        },
+                    ]
+                })
+
+                this.loadDataDetailUser()
+            }
+        },
+        methods: {
+            loadDataDetailUser() {
+                app.request.promise.get(`${URL}detailUser`, {
+                    nim
+                }, 'json').then(res => {
+                    app.form.fillFromData('#formUser', res.data)
+                })
+            },
+            klikNext: function () {
+                app.accordion.open('#accordionStep2')
+            },
+            submitPendaftaran: function () {
+                const $form = $$('#formUser')
+
+                if (!$form[0].checkValidity()) return
+
+                this.action.open()
+            },
+            sendData: function () {
+                const id = app.utils.id('ord-xxxx-xxxx-xxxx')
+                const pembayaran = this.selectPembayaran.getValue()
+                const tanggal = this.tanggalMasuk.getValue()[0]
+                const tanggal_masuk = moment(tanggal).format('YYYY-MM-DD')
+                const tanggal_keluar = (pembayaran == 'Bulanan') ?
+                    moment(tanggal).add(1, 'M').format('YYYY-MM-DD') :
+                    moment(tanggal).add(1, 'Y').format('YYYY-MM-DD')
+
+                const dataSewa = {
+                    id,
+                    nim,
+                    tanggal_masuk,
+                    tanggal_keluar,
+                    pembayaran,
+                    total_bayar: this.biaya,
+                    id_kamar: this.id_kamar,
+                    status: 'Belum diupload'
+                }
+
+                const dataUser = app.form.convertToData('#formUser');
+
+                app.preloader.show();
+                app.request.promise.post(`${URL}pembayaran`, {
+                    dataSewa,
+                    dataUser
+                }, 'json').then(res => {
+                    app.preloader.hide();
+
+                    app.toast.create({
+                        icon: res.data.error ?
+                            '<i class="icon f7-icons">exclamationmark_circle_fill</i>' :
+                            '<i class="icon f7-icons">checkmark_alt_circle_fill</i>',
+                        text: res.data.message,
+                        position: 'center',
+                        destroyOnClose: true,
+                        closeTimeout: 3000,
+                    }).open()
+
+                    if (res.data.error) return
+                    // app.views.home.router.history = ['/']
+                    // app.views.current.router.history = ['/']
+                    app.views.home.router.navigate(`/pembayaran/${id}/`, {
+                        // clearPreviousHistory: true
+                        // reloadAll: true
+                    })
+
+                    app.statusbar.overlaysWebView(true)
+
+                    app.emit('loadDataPesanan')
+                    app.emit('loadDataHistori')
+                })
+            }
+        }
+    }
+</script>

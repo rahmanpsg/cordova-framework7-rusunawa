@@ -1,0 +1,111 @@
+<template>
+    <div class="page login-screen-page" data-name="login">
+        <div class="page-content login-screen-content">
+            <div class="login-screen-title">
+                <p><img src="./assets/logo.png" width="100"></p>
+                <div class="block">Rusunawa Mahasiswa<br>Universitas Muhammadiyah Parepare</div>
+            </div>
+            <form id="loginForm" @submit="login">
+                <div class="list">
+                    <ul>
+                        <li class="item-content item-input">
+                            <div class="item-inner">
+                                <div class="item-title item-label">NIM/NBM</div>
+                                <div class="item-input-wrap">
+                                    <input type="number" name="nim" placeholder="Masukkan NIM/NBM" required validate
+                                        data-error-message="NIM/NBM tidak boleh kosong" autocomplete="off">
+                                </div>
+                            </div>
+                        </li>
+                        <li class="item-content item-input">
+                            <div class="item-inner">
+                                <div class="item-title item-label">Password</div>
+                                <div class="item-input-wrap">
+                                    <input type="password" name="password" placeholder="Masukkan password" required
+                                        validate data-error-message="Password tidak boleh kosong">
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="block">
+                    <a class="col-100 medium-50 button button-fill button-round" href="#" @click="login">Login</a>
+                    <br>
+                    <div class="row">
+                        <a href="/registrasi/" data-transition="f7-circle" class="button">Daftar</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</template>
+<script>
+    // script must return component object
+    return {
+        on: {
+            pageAfterIn: function () {
+                app.statusbar.overlaysWebView(false)
+                app.statusbar.setBackgroundColor('#fff')
+            }
+        },
+        methods: {
+            login: function () {
+                const form = $$('#loginForm');
+                if (!form[0].checkValidity()) return
+
+                const data = app.form.convertToData('#loginForm');
+
+                app.preloader.show();
+                app.request.promise.post(`${URL}login`, data, 'json')
+                    .then(res => {
+                        app.preloader.hide();
+
+                        app.toast.create({
+                            icon: res.data.error ?
+                                '<i class="icon f7-icons">exclamationmark_circle_fill</i>' :
+                                '<i class="icon f7-icons">checkmark_alt_circle_fill</i>',
+                            text: res.data.message,
+                            position: 'center',
+                            destroyOnClose: true,
+                            closeTimeout: 3000,
+                        }).open()
+
+                        if (res.data.error) return
+
+                        localStorage.setItem('hasLogin', !res.data.error);
+                        localStorage.setItem('nim', data.nim)
+                        localStorage.setItem('kategori', res.data.kategori)
+                        localStorage.setItem('nama', res.data.nama)
+
+                        nim = data.nim
+                        kategori = res.data.kategori
+                        nama = res.data.nama
+
+                        ls.close()
+                        app.statusbar.overlaysWebView(true)
+                        app.views.create('.view-main', {
+                            url: '/',
+                            name: 'home'
+                        })
+
+                        return
+
+                        // Save token 
+                        FirebasePlugin.getToken((token) => {
+                            app.request.post(`${URL}token`, {
+                                token,
+                                nim,
+                            }, 'json')
+                        })
+                    })
+                    .catch(err => {
+                        console.log(err);
+                        app.preloader.hide();
+                        app.dialog.preloader('Tidak dapat terhubung ke server...');
+                    })
+
+
+            }
+        }
+    }
+</script>

@@ -1,0 +1,179 @@
+<template>
+    <div class="page">
+        <div class="navbar">
+            <div class="navbar-bg"></div>
+            <div class="navbar-inner">
+                <div class="navbar-inner sliding">
+                    <div class="subnavbar">
+                        <div class="left">
+                            <a class="link" href="#" @click="beranda">
+                                <i class="f7-icons">xmark</i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="page-content" style="background: rgb(12, 1, 186);
+            background: linear-gradient(90deg, rgba(12, 1, 186, 1) 0%, rgba(1, 89, 186, 1) 50%, rgba(0, 172, 255, 1)
+            100%);">
+            <div class="block">
+                <div class="block block-title-large text-color-white">
+                    Selamat {{user}}, Pesanan kamu telah berhasil dibuat!
+                </div>
+                <div class="block">
+                    {{#js_if "this.dataPembayaran.status == 'Belum diupload'"}}
+                    <div class="text-color-white">Selesaikan pembayaran sebelum</div>
+                    <div class="block-title-medium text-color-white">
+                        {{waktu}}
+                    </div>
+                    {{else}}
+                    <div class="block-title-medium text-color-white">
+                        {{dataPembayaran.status}}
+                    </div>
+                    {{/js_if}}
+                </div>
+                <div class="card">
+                    <div class="card-content">
+                        <div class="list">
+                            <ul>
+                                <li>
+                                    <div class="item-inner">
+                                        <div class="block item-title">
+                                            ID Pemesanan
+                                            <p><b>{{id}}</b></p>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="media-list">
+                                    <div class="item-inner">
+                                        <div class="item-title display-flex justify-content-center">
+                                            <img src="./assets/mandiri_syariah.png" width="70px">
+                                        </div>
+                                        <div class="item-subtitle text-align-center">
+                                            <p><b>7126016764</b></p>
+                                            a/n RUSUNAWA UM PAREPARE<br>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="accordion-item">
+                                    <a href="#" class="item-content item-link">
+                                        <div class="item-inner">
+                                            <div class="item-title">Total Pembayaran</div>
+                                            <div class="item-after text-color-black">
+                                                <b>{{dataPembayaran.total_bayar.replaceAll(',','.')}}</b></div>
+                                        </div>
+                                    </a>
+                                    <div class="accordion-item-content">
+                                        <div class="block">
+                                            <div class="list no-hairlines">
+                                                <ul>
+                                                    {{#each dataKamar}}
+                                                    <li class="item-content">
+                                                        <div class="item-inner">
+                                                            <div class="item-title">{{@key.toUpperCase()}}</div>
+                                                            <div class="item-after text-color-black">
+                                                                <b>{{this}}</b>
+                                                            </div>
+                                                        </div>
+                                                    </li>
+                                                    {{/each}}
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="block text-color-white"><i class="icon f7-icons"
+                        style="font-size: 20px;">exclamationmark_circle</i> Harap transfer
+                    sesuai dengan total pembayaran, dan segera upload bukti pembayaran</div>
+            </div>
+        </div>
+    </div>
+</template>
+<script>
+    // script must return component object
+    return {
+        data: function () {
+            return {
+                user: nama,
+                dataPembayaran: {
+                    total_bayar: ''
+                },
+                dataKamar: []
+            };
+        },
+        on: {
+            pageInit: function () {
+                this.$setState(this.$route.params);
+                this.getDataPembayaran();
+            },
+            pageBeforeRemove: function () {
+                clearInterval(this.waktuInterval);
+            }
+        },
+        methods: {
+            getDataPembayaran: function () {
+                const self = this;
+
+                app.request.promise.get(`${URL}pembayaran`, {
+                    id: this.id
+                }, 'json').then(res => {
+                    self.$setState(res.data)
+
+                    if (res.data.dataPembayaran.status == 'Belum diupload') {
+                        self.hitungWaktu()
+                    }
+                })
+            },
+            hitungWaktu: function () {
+                const self = this;
+                let countDownDate = new Date(this.dataPembayaran.waktuBerakhir);
+
+                this.waktuInterval = setInterval(function () {
+
+                    let now = new Date().getTime();
+
+                    let distance = countDownDate - now;
+
+                    let days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                    let hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    let minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                    let seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                    let waktu =
+                        `${days > 0 ? days + ' hari' : ''} ${hours > 0 ? hours + ' jam' : ''} ${minutes} menit ${seconds} detik`;
+
+                    self.$setState({
+                        waktu
+                    })
+
+                    if (distance < 0) {
+                        clearInterval(this.waktuInterval);
+
+                        self.$setState({
+                            waktu: 'Expired'
+                        })
+                    }
+                }, 1000);
+            },
+            beranda: function () {
+                clearInterval(this.waktuInterval);
+
+                if (app.views.home.history.length > 2) {
+                    app.views.home.router.back('/', {
+                        force: true
+                    })
+
+                    return
+                }
+
+                app.views.home.router.back('/')
+
+            }
+        }
+    }
+</script>

@@ -1,0 +1,222 @@
+<template>
+    <div class="page">
+        <div class="navbar">
+            <div class="navbar-bg"></div>
+            <div class="navbar-inner sliding">
+                <div class="left"><a class="back"><i class="icon f7-icons">chevron_left</i>Kembali</a></div>
+                <div class="title">Registrasi</div>
+            </div>
+        </div>
+        <div class="page-content login-screen-content">
+            <form id="registrasiForm">
+                <div class="list">
+                    <ul>
+                        <li class="item-content item-input">
+                            <div class="item-inner">
+                                <div class="item-title item-label">Nama</div>
+                                <div class="item-input-wrap">
+                                    <input type="text" name="nama" placeholder="Masukkan nama" required validate
+                                        data-error-message="Nama tidak boleh kosong">
+                                    <span class="input-clear-button"></span>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="item-content item-input">
+                            <div class="item-inner">
+                                <div class="item-title item-label">NIM/NBM</div>
+                                <div class="item-input-wrap">
+                                    <input type="number" name="nim" id="nim" placeholder="Masukkan NIM/NBM" required
+                                        validate data-error-message="Nim tidak boleh kosong">
+                                    <span class="input-clear-button"></span>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="item-content item-input">
+                            <div class="item-inner">
+                                <div class="item-title item-label">Password</div>
+                                <div class="item-input-wrap">
+                                    <input type="password" name="password" id="password" placeholder="Masukkan password"
+                                        required validate data-error-message="Password tidak boleh kosong">
+                                    <span class="input-clear-button"></span>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="item-content item-input">
+                            <div class="item-inner">
+                                <div class="item-title item-label">No Telpon</div>
+                                <div class="item-input-wrap">
+                                    <input type="number" name="telp" id="telp" placeholder="Masukkan nomor telpon"
+                                        required validate data-error-message="Nomor Telpon tidak boleh kosong">
+                                    <span class="input-clear-button"></span>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="item-content item-input">
+                            <div class="item-inner">
+                                <div class="item-title item-label">Alamat</div>
+                                <div class="item-input-wrap">
+                                    <textarea name="alamat" placeholder="Masukkan alamat" required validate
+                                        data-error-message="Alamat tidak boleh kosong" class="resizable"></textarea>
+                                    <span class="input-clear-button"></span>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="item-content item-input">
+                            <div class="item-inner">
+                                <div class="item-title item-label">Jurusan</div>
+                                <div class="item-input-wrap">
+                                    <input type="text" name="jurusan" id="jurusan" placeholder="Masukkan jurusan"
+                                        required validate data-error-message="Jurusan tidak boleh kosong">
+                                    <span class="input-clear-button"></span>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="item-content item-input">
+                            <div class="item-inner">
+                                <div class="item-title item-label">Jenis Kelamin</div>
+                                <div class="item-input-wrap">
+                                    <a class="item-link smart-select smart-select-init" data-open-in="sheet">
+                                        <select name="jenis_kelamin" required validate
+                                            data-error-message="Jenis kelamin belum dipilih">
+                                            <option value="Laki-laki" data-display-as="Laki-laki">
+                                                Laki-laki
+                                            </option>
+                                            <option value="Perempuan" data-display-as="Perempuan">
+                                                Perempuan
+                                        </select>
+                                        <div class="item-content">
+                                            <div class="item-title">Pilih Jenis Kelamin</div>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="item-content item-input">
+                            <div class="item-inner">
+                                <div class="item-title item-label">Tanggal Lahir</div>
+                                <div class="item-input-wrap">
+                                    <input type="date" name="tgl_lahir" placeholder="Masukkan tanggal lahir" required
+                                        validate data-error-message="Tanggal Lahir tidak boleh kosong">
+                                </div>
+                            </div>
+                        </li>
+                        <li class="item-content item-input item-link">
+                            <div class="item-inner">
+                                <div class="item-input-wrap">
+                                    <div class="item-title item-label">Foto</div>
+                                    <input type="file" name="foto" id="foto" accept=".png, .jpg, .jpeg" required
+                                        validate data-error-message="Foto tidak boleh kosong">
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="block">
+                    <a class="col-100 medium-50 button button-fill button-round" href="#" @click="daftar">Daftar</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</template>
+<script>
+    // script must return component object
+    return {
+        methods: {
+            checkFormValidate: function () {
+                const form = $$('#registrasiForm');
+                const nim = $$('#nim').val();
+                const password = $$('#password').val();
+                const email = $$('#email').val();
+                const telp = $$('#telp').val();
+                let res = true;
+
+                if (nim.length > 0 && nim.length < 6) {
+                    this.markInputAsError(form, 'nim', 'Nim minimal 6 angka');
+                    res = false;
+                } else {
+                    const cek = app.request({
+                        url: `${URL}cekData`,
+                        data: {
+                            nim
+                        },
+                        dataType: 'json',
+                        async: false
+                    })
+
+                    const json = JSON.parse(cek.response)
+
+                    if (json.error) {
+                        this.markInputAsError(form, 'nim', json.message);
+                        res = false
+                    }
+                }
+
+                if (password.length > 0 && password.length < 6) {
+                    this.markInputAsError(form, 'password', 'Password harus lebih dari 6 karakter');
+                    res = false;
+                }
+
+
+                if (telp.length > 0 && telp.length < 11) {
+                    this.markInputAsError(form, 'telp', 'Nomor telpon tidak valid');
+                    res = false;
+                }
+
+                return res;
+            },
+            markInputAsError: function (componentEl, inputName, message) {
+                var self = this;
+                var el = componentEl.find('input[name="' + inputName + '"]');
+                el.addClass('input-invalid');
+                el.parent().parent().parent().addClass('item-input-with-error-message item-input-invalid');
+                if (!el.next('.item-input-error-message').length) {
+                    self.$('<div class="item-input-error-message">' + message + '</div>').insertAfter(el);
+                } else {
+                    el.next('.item-input-error-message').html(message);
+                }
+            },
+            daftar: async function () {
+                const form = $$('#registrasiForm');
+
+                if (!this.checkFormValidate() && form[0].checkValidity()) {
+                    app.dialog.alert('Perbaiki data yang anda masukkan', 'Informasi');
+                    return
+                }
+
+                const data = app.form.convertToData('#registrasiForm');
+
+                const file = document.querySelector('#foto').files[0];
+
+                if (file.size > 300000) {
+                    app.dialog.alert('Ukuran file foto maksimal 300KB', 'Informasi');
+                    return
+                }
+                data['foto'] = await this.toBase64(file)
+
+                app.preloader.show();
+                app.request.promise.post(`${URL}registrasi`, data, 'json')
+                    .then(res => {
+                        app.preloader.hide();
+
+                        app.dialog.alert(res.data.message, 'Informasi');
+
+                        if (!res.data.error) {
+                            app.views[0].router.back()
+                        }
+                    })
+                    .catch(err => {
+                        console.log(err);
+                        app.preloader.hide();
+                        app.dialog.preloader('Terjadi masalah diserver...');
+                    })
+
+            },
+            toBase64: file => new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = error => reject(error);
+            })
+        }
+    }
+</script>
